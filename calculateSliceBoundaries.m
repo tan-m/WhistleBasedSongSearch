@@ -8,7 +8,7 @@ energySmooth = conv(energyFile, g, 'same');
 
 [peak, peakLoc] = powerPeaks(energySmooth,0.7, 0.8);
 
-[trough, troughLoc]= powerPeaks(-energySmooth, 0.5, 0.7);
+[trough, troughLoc]= powerPeaks(-energySmooth, 0.5, 3);
 
 % plot(energySmooth,'Color','blue'); hold on;
 %

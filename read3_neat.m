@@ -46,9 +46,11 @@ g = g/sum(g);
 energySmooth = conv(energyFile, g, 'same');
 
 
-[peak, peakLoc] = powerPeaks(energySmooth,0.7, 0.8);
+[peak, peakLoc,minPeakHeight] = powerPeaks(energySmooth,0.7, 0.6);
 
-[trough, troughLoc]= powerPeaks(-energySmooth, 0.5, 0.7);
+[trough, troughLoc,minPeakHeight1]= powerPeaks(-energySmooth, 0.5, 3);
+
+
 
 % plot(energySmooth,'Color','blue'); hold on;
 %
@@ -88,9 +90,12 @@ multFactor = 5;
 plot(multFactor*energySmooth,'Color','blue'); hold on;
 plot(trough_before,multFactor*energySmooth(trough_before),'k^','markerfacecolor',[1 1 0]);
 plot(trough_after,multFactor*energySmooth(trough_after),'k^','markerfacecolor',[1 0 0]);
-plot(pitchFile,'Color','green');
 
+%plot(pitchFile,'Color','green');
 
+ plot(1:length(energyFile), minPeakHeight, 'yellow');
+% 
+ plot(1:length(energyFile), -minPeakHeight1, 'red');
 
 
 
@@ -191,7 +196,9 @@ for i = 1 : length(trough_after)
         finalPitch(i) = uint32(mode3);
     end
     mode3array(i)=mode3;
+   
     plot(before(i):after(i),sliceSmooth,'Color','red');
+    
     % %plot(before(i):after(i), p(1)*(before(i):after(i))+p(2),'Color','black');
     
     

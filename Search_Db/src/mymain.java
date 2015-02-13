@@ -14,6 +14,8 @@ public class mymain {
 	public static void main(String[] args) 
 	{
 		// TODO Auto-generated method stub
+		int start=(int) System.currentTimeMillis();
+		
 		String str1;
 		double d1;
 		Vector<Double> finalResult = new Vector<Double> ();
@@ -62,16 +64,23 @@ public class mymain {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	
 		
 		
-	/*	Search sh = new Search();
-		Integer[] qarr = {4, 3, 1, 6, };
-		Integer[] dbarr = { -6, -8, -10, -10, -15};
+		
+		/*Search sh = new Search();
+		//Integer[] qarr = {4, 3, 1, 6, };
+		//Integer[] dbarr = { 6, 8, 10, 4,3,1, 6,8,10,14};
+		
+		Integer[] qarr = {7, 1, 20, 20, 1, 3, 1 };
+		Integer[] dbarr = {7, 3, 1, 20, 7, 3, 21};
+		
 		Vector<Integer> q = new Vector<Integer>(Arrays.asList(qarr));
 		Vector<Integer> db = new Vector<Integer>(Arrays.asList(dbarr));
 		System.out.println(sh.score(q, db));
-	*/
+		*/
+		
+		int end=(int) System.currentTimeMillis();
+		System.out.println("exec time "+(end-start));
 	}
 
 }

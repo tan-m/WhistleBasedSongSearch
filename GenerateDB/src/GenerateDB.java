@@ -60,7 +60,6 @@ public class GenerateDB {
 		else
 			id=Integer.parseInt(temp.toString());
 		id++;
-		id=3;
 		
 		System.out.println("id --- > "+id);
 		
@@ -91,7 +90,7 @@ public class GenerateDB {
 			}
 			//op.newLine();
 			//op.newLine();
-			for (int i = 1; i <= (12 - min); i++) {
+			for (int i = 1; i <= (36 - min); i++) {
 				for (int j = 0; j < s.length; j++) {
 					val1[j] = val[j] + i;
 					notation=notation.concat(val1[j]+" ");

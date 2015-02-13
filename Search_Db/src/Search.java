@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
+
 import com.mysql.jdbc.Statement;
 /**
  *
@@ -54,13 +55,57 @@ public class Search {
 	{
 		return -1;
 	}
+	
+	void align(int F[][],Vector<Integer> q, Vector<Integer> db)
+	{
+		String AlignmentA = ""; // query
+		String AlignmentB = ""; // db
+		int i = q.size();
+		int j = db.size();
+		while (i >0 || j > 0)
+		{
+			if (i > 0 && j > 0 && F[i][j] == (F[i-1][j-1] + simSc(q.get(i-1),db.get(j-1))))
+			{
+				AlignmentA = q.get(i-1).toString()+" "  + AlignmentA;
+				AlignmentB = db.get(j-1).toString()+" "  + AlignmentB;
+				i = i-1;
+				j = j-1;
+			}
+			else if (i > 0 && F[i][j] == (F[i-1][j] + delSc()))
+			{
+				AlignmentA = q.get(i-1).toString() +" "+ AlignmentA;
+				AlignmentB = "-" +" " + AlignmentB;
+				i= i-1;
+			}
+			else if (j > 0 && F[i][j] == F[i][j-1] + delSc())
+			{
+				AlignmentA 	= "-"+" "  + AlignmentA;
+				AlignmentB 	= db.get(j-1).toString()+" "  + AlignmentB;
+				j=j-1;
+			}
+		}
+		int match=0;
+		System.out.println("align :");
+		System.out.println(AlignmentB);
+		System.out.println(AlignmentA);
+		String[] qarr = AlignmentA.split(" ");
+		String[] dbarr =AlignmentB.split(" ");
+		for (int j2 = 0; j2 < qarr.length; j2++) {
+			if(qarr[j2].equals(dbarr[j2]) && (!qarr[j2].equals("-")))
+			{
+				match++;
+			}
+		}
+		System.out.println("match is ->"+match);
+	}
+	
 	int simSc(int a, int b)
 	{
 		
 		if(a == b)
 			return 1;
-		return (Math.abs(a-b)*-1);
-		//return -1;
+		//return (Math.abs(a-b)*-1);
+		return -1;
 	}
 	// needleman wunch algo
 	//       db
@@ -78,7 +123,7 @@ public class Search {
 		}
 		for(int i=0;i<=db.size();i++)
 		{
-			F[0][i] = 0;//d * i;
+			F[0][i] = d * i; //0;
 		}
 		for(i=1;i<=q.size();i++)
 		{
@@ -104,10 +149,13 @@ public class Search {
 		{
 			if(F[q.size()][i] > max)
 				max = F[q.size()][i];
-		} 
-		return max;
-		//return F[q.size()][db.size()];
+		}
+		align(F,q,db);
+		
+		//return max;
+		return F[q.size()][db.size()];
 	}
+	
 	public void startSearch(Vector<Integer> userQ) throws SQLException 
 	{
 		SearchThread[] st = new SearchThread[MAX_DB_SIZE];
@@ -139,7 +187,9 @@ public class Search {
 					}
 					else
 					{
-						st[threadCnt++] = new SearchThread((previd),userQ,song,finalScore,avgScore);
+						Vector<Integer> editSc = new Vector<Integer>();
+						Vector<Integer> matchCnt = new Vector<Integer>();
+						st[threadCnt++] = new SearchThread((previd),userQ,song,finalScore,avgScore,editSc,matchCnt);
 						song=null;
 						song = new Vector<Vector<Integer>>(70);
 						
@@ -158,7 +208,9 @@ public class Search {
 				val=new Vector<Integer>();
 				previd=curid;
 			}
-			st[threadCnt++] = new SearchThread(curid,userQ,song,finalScore,avgScore);
+			Vector<Integer> editSc = new Vector<Integer>();
+			Vector<Integer> matchCnt = new Vector<Integer>();
+			st[threadCnt++] = new SearchThread(curid,userQ,song,finalScore,avgScore,editSc,matchCnt);
 		} 
 		catch (NumberFormatException e) {
 			// TODO Auto-generated catch block
@@ -182,8 +234,8 @@ public class Search {
 			i++;
 		}
 		System.out.println("finalscore and avgscore is ---->\n\n ");
-		System.out.println("1) song name - SaReGaMaPa	   	"+finalScore.get(1) );
-		System.out.println("2) song name - Twinkle twinkle		"+finalScore.get(2) );
+		//System.out.println("1) song name - SaReGaMaPa	   	"+finalScore.get(1) );
+		//System.out.println("2) song name - Twinkle twinkle		"+finalScore.get(2) );
 		/*for (int index = 1; index <=finalScore.size(); index++) 
 		{
 			System.out.println(finalScore.get(index) + "	"+	avgScore.get(index));

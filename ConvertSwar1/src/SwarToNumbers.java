@@ -292,7 +292,7 @@ public class SwarToNumbers {
 		try 
 		{
 			ip = new BufferedReader(new FileReader(new
-					File("F:\\Whistle Based Song Search\\swar\\YeDosti.txt")));
+					File("F:\\Whistle Based Song Search\\swar\\Rushabh'sNotes\\JashnEBahara.txt")));
 		}
 		catch (FileNotFoundException e) 
 		{
