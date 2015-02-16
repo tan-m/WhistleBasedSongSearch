@@ -18,7 +18,7 @@ import com.mysql.jdbc.Statement;
 public class GenerateDB {
 
 	/**
-	 * @param args
+	 * @param args 
 	 */
 	private java.sql.Connection conn = null;
 	String pwd = "abcde";
@@ -117,8 +117,10 @@ public class GenerateDB {
 
 	}
 	public static void main(String[] args) {
+			
 		// TODO Auto-generated method stub
 		GenerateDB g = new GenerateDB();
+		
 		try {
 			g.connecttodb();
 			g.generate();

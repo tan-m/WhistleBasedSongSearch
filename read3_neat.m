@@ -183,18 +183,24 @@ for i = 1 : length(trough_after)
     
     fullSlice= pitchFile(trough_before(i):trough_after(i));
     filteredSlice = fullSlice(fullSlice>low & fullSlice<high);
-    low
-    high
-    filteredSlice
-    p = polyfit(double(1:length(filteredSlice)),double(filteredSlice),1);
-    
-    
-    mode3 = mode(filteredSlice); %mode of filtered slice
-    if(p(1)<0.2 & p(1)>-0.2)
-        finalPitch(i) = uint32((p(2)));
+    if length(filteredSlice) > 0
+        low
+        high
+        filteredSlice
+        p = polyfit(double(1:length(filteredSlice)),double(filteredSlice),1);
+
+
+        mode3 = mode(filteredSlice); %mode of filtered slice
+        if(p(1)<0.2 & p(1)>-0.2)
+            finalPitch(i) = uint32((p(2)));
+        else
+            finalPitch(i) = uint32(mode3);
+        end
     else
-        finalPitch(i) = uint32(mode3);
-    end
+        disp('Adding mode2. filteredSlice is empty');
+        finalPitch(i) = mode2(i);
+    end    
+    
     mode3array(i)=mode3;
    
     plot(before(i):after(i),sliceSmooth,'Color','red');

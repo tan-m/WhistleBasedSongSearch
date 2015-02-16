@@ -1,15 +1,14 @@
-import java.util.Arrays;
+
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
+
+
 
 
 public class SearchThread implements Runnable 
 {
 	Thread t;
 	Vector<Integer> q;
-	ConcurrentHashMap<Integer,Integer> finalscore  = new ConcurrentHashMap<Integer,Integer>();
-	ConcurrentHashMap<Integer,Double> avgScore  = new ConcurrentHashMap<Integer,Double>();
 	Vector<Vector<Integer>> db;
 	Vector<Integer> matchCnt;
 	Vector<Integer> editSc;
@@ -18,17 +17,18 @@ public class SearchThread implements Runnable
 	int [][] FforScore;
 	int i,j;
 	int match, delete, insert, d;
-	int avg = 0,cnt=0;
-	int maxscore=Integer.MIN_VALUE;
-	SearchThread(int id,Vector<Integer> q, Vector<Vector<Integer>> db,ConcurrentHashMap finalscore,ConcurrentHashMap avgScore,Vector<Integer> editSc,Vector<Integer> matchCnt)
+	int maxEditSc, maxMatchCnt;
+	ConcurrentHashMap<Integer,Integer> scoresForAllSongs,  matchCountForAllSongs;
+	
+	SearchThread(int id,Vector<Integer> q, Vector<Vector<Integer>> db, ConcurrentHashMap<Integer,Integer> scoresForAllSongs, ConcurrentHashMap<Integer,Integer> matchCountForAllSongs)
 	{
 		this.id=id;
 		this.db=db;
 		this.q=q;
-		this.finalscore=finalscore;
-		this.avgScore=avgScore;
-		this.editSc=editSc;
-		this.matchCnt=matchCnt;
+		editSc = new Vector<Integer>(); 
+		this.scoresForAllSongs = scoresForAllSongs;
+		this.matchCountForAllSongs = matchCountForAllSongs;
+		matchCnt= new Vector<Integer>() ;
 		F = new int[100][100];
 		FforScore = new int[100][100];
 		t = new Thread(this);
@@ -45,6 +45,7 @@ public class SearchThread implements Runnable
 			return 1;
 		}
 		return -1;
+		//return (Math.abs(a-b)*-1);
 	}
 
 
@@ -78,7 +79,7 @@ public class SearchThread implements Runnable
 		}
 		int match=0;
 		//System.out.println(AlignmentB);
-		//System.out.println(AlignmentA);
+		//System.out.println(AlignmentA+"\n");
 		String[] qarr = AlignmentA.split(" ");
 		String[] dbarr =AlignmentB.split(" ");
 		for (int j2 = 0; j2 < qarr.length; j2++) {
@@ -91,6 +92,13 @@ public class SearchThread implements Runnable
 		return match;
 	}
 
+	// needleman wunch algo
+		//       db
+		//     -------------
+		//     |
+		//  q  |
+		//     |
+	
 	public int needlemanWunsch(int F[][],Vector<Integer> curr,Vector<Integer> q, int flag) // flag = 0 the it is for score
 	{
 		d = delSc();
@@ -157,10 +165,9 @@ public class SearchThread implements Runnable
 	{
 		Object lock = null;
 		lock = new Object();
-		int max=0;
-		// with gap penalty
-		//System.out.println("db is "+db);
-		synchronized(lock)
+	
+		
+		//synchronized(lock)
 		{
 			for (int ver = 1; ver < db.size(); ver++) 
 			{
@@ -170,12 +177,10 @@ public class SearchThread implements Runnable
 
 				needlemanWunsch(FforScore,curr,q,0);
 				needlemanWunsch(F,curr,q,1);
-
-				//System.out.println("Score of song# "+id+" ver# "+ver+"  ="+maxscore);
 				
 			} // end of for ver loop
 
-			//System.out.println(id+"   :  "+maxscore);
+			
 			
 			
 			System.out.println("details of #"+id);
@@ -183,21 +188,26 @@ public class SearchThread implements Runnable
 			
 			
 			
-			int maxEditSc=Integer.MIN_VALUE, maxMatchCnt=Integer.MIN_VALUE, temp = 0;
+			maxEditSc=Integer.MIN_VALUE;
+			maxMatchCnt=Integer.MIN_VALUE;
+			
 			for(i=0;i<editSc.size();i++)
 			{
 				if(maxEditSc < editSc.get(i))
 				{
 					maxEditSc = editSc.get(i);
-					temp = matchCnt.get(i);
-				}
-				if(maxMatchCnt < matchCnt.get(i))
 					maxMatchCnt = matchCnt.get(i);
+				}
+				/*if(maxMatchCnt < matchCnt.get(i))
+					maxMatchCnt = matchCnt.get(i);
+				*/
 			}
 			
-			System.out.println("song id #"+id+" maxEditSc = "+maxEditSc+" maxMatchCnt = "+maxMatchCnt+" temp = "+temp);
+			matchCountForAllSongs.put(id,maxMatchCnt);
+			scoresForAllSongs.put(id,maxEditSc);
+			
+			System.out.println("song id #"+id+" maxEditSc = "+maxEditSc+" maxMatchCnt = "+maxMatchCnt);
 			System.out.println("\n\n");
-
 		}
 	}
 }

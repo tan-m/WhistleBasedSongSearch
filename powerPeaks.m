@@ -1,4 +1,4 @@
-function [pklg,lclg] = powerPeaks(arr1, shortPara, heightPara)
+function [pklg,lclg,minPeakHeight] = powerPeaks(arr1, shortPara, heightPara)
 
 
 [pksh,lcsh] = findpeaks(arr1);
@@ -15,7 +15,7 @@ end
 
 short = short * shortPara;
 minPeakHeight = mean(arr1)*heightPara;
-
+%minPeakHeight = mean(arr1)-std(arr1);
 
 
 [pklg,lclg] = findpeaks(arr1, ...
