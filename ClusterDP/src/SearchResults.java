@@ -1,4 +1,9 @@
 import java.awt.List;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -110,7 +115,7 @@ public class SearchResults
 
 	}
 
-	int calculateconfidence(int sc,int cnt)
+	/* int calculateconfidence(int sc,int cnt)
 	{
 		double confidence=30;
 		//System.out.println("sc "+sc);
@@ -127,9 +132,17 @@ public class SearchResults
 			return (int)(confidence/3);
 		return (int)confidence;
 	}
+	*/
 	
 	void fetchResult(Vector<Integer> searchList) throws SQLException, ClassNotFoundException
 	{
+		/*BufferedWriter br; 
+		try {
+			br = new BufferedWriter(new FileWriter("..\\Cluster_DP_output.txt"));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
 		Class.forName("com.mysql.jdbc.Driver");
 		String url = "jdbc:mysql://localhost:3306/project";
 		String pwd = "abcde";
@@ -143,6 +156,7 @@ public class SearchResults
 		//System.out.println("\nRanked list :\n");
 		String query="";
 		int i;
+		int currmax=Integer.MIN_VALUE;
 		for ( i=0;i<searchList.size();i++) 
 		{
 			query=query+searchList.get(i)+" ; ";
@@ -150,12 +164,17 @@ public class SearchResults
 			rs.first();
 			Object dbtime;
 			dbtime=rs.getString(1);
-			System.out.println(dbtime.toString());
+			System.out.println(dbtime.toString() +"score -->"+scoresForAllSongs.get(searchList.get(i)));
+			if(currmax<scoresForAllSongs.get(searchList.get(i)))
+			{
+				currmax=scoresForAllSongs.get(searchList.get(i));
+			}
 			orderedSongList[i] = dbtime.toString();
-			orderedSongconfidence[i]=calculateconfidence(scoresForAllSongs.get(searchList.get(i)),matchCountForAllSongs.get(searchList.get(i)));
-			System.out.println(orderedSongconfidence[i]);
+			/* orderedSongconfidence[i]=calculateconfidence(scoresForAllSongs.get(searchList.get(i)),matchCountForAllSongs.get(searchList.get(i)));
+			System.out.println(orderedSongconfidence[i]); */
 			query="";
 		}
+		NoteAssignment.maxvec.add(currmax);
 		System.out.println();
 		conn.close();
 	}
@@ -220,4 +239,8 @@ public class SearchResults
 			}
 		}
 	}
+
+
+
+
 }

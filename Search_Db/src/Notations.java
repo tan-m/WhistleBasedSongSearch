@@ -40,16 +40,17 @@ public class Notations
 		
 		if(mid==0)
 		{
-			System.out.println("error");
+			//System.out.println("error");
 			System.exit(0);
 		}
 		
 		high = mid + ((secondMin - mid)*0.75);
 		low = mid - ((secondMin - mid)*0.75);
-		System.out.println("2min"+secondMin);
+		
+		/*System.out.println("2min"+secondMin);
 		System.out.println("low"+low);
 		System.out.println("high"+high);
-		System.out.println("mid"+mid);
+		System.out.println("mid"+mid); */
 		
 		double incr = Math.ceil(mid/100.0);
 		incr=1;
@@ -75,17 +76,17 @@ public class Notations
 		//shiftFundamental(mid,Q,true);
 		return Q;
 		
-	}
+	} 
 
 	double shiftFundamental(double fundamental,Vector<Integer> Q,boolean flag)
 	{
 		double errforQ=0;
-		System.out.println("fundamental is "+fundamental);
+		//System.out.println("fundamental is "+fundamental);
 		double factor = 1.059463094;
 		for (int i = 0; i < 36; i++) 
 		{
 			octave[i] = fundamental * Math.pow(factor, i);
-			if(flag)	System.out.println(i+"  "+octave[i]);
+			if(flag);	//System.out.println(i+"  "+octave[i]);
 		}
 		double minerror;
 		int note = 0;

@@ -10,18 +10,20 @@ import java.util.Vector;
 public class mymain {
 
 	
-	 
+	static int noteLength;
 	public static void main(String[] args) 
 	{
 		// TODO Auto-generated method stub
-		int start=(int) System.currentTimeMillis();
+		
+		//int start=(int) System.currentTimeMillis();
 		
 		String str1;
 		double d1;
 		Vector<Double> finalResult = new Vector<Double> ();
 		BufferedReader br1 = null;
 		try {
-			br1 = new BufferedReader(new FileReader("C:\\Users\\tanmay\\Desktop\\pitch.txt"));
+			br1 = new BufferedReader(new FileReader(".\\TempFile\\pitch.txt"));
+			//br1 = new BufferedReader(new FileReader("C:\\Users\\tanmay\\Desktop\\pitch.txt"));
 		} catch (FileNotFoundException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -41,13 +43,19 @@ public class mymain {
 		} 
 		catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e.printStackTrace(); 
 		}
 		
 		Notations n= new Notations(finalResult);	
 		Vector<Integer> Q =n.extractNotations();
-		System.out.println("notations are -- >"+Q);
-		Search sch=new Search();
+		
+		// keep this syso
+		System.out.println(Q);
+		
+		noteLength =Q.size();
+		
+		
+		Search sch = new Search();
 		try 
 		{
 			sch.connecttodb();
@@ -79,8 +87,8 @@ public class mymain {
 		System.out.println(sh.score(q, db));
 		*/
 		
-		int end=(int) System.currentTimeMillis();
-		System.out.println("exec time "+(end-start));
+		/*int end=(int) System.currentTimeMillis();
+		System.out.println("exec time "+(end-start));*/
 	}
 
 }

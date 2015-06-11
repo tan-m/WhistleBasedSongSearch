@@ -18,6 +18,130 @@ public class SwarToNumbers {
 		ip.close();
 	}
 	
+	int switchHarpTabs(String s) // C major diatonic
+	{
+		int number=0;
+		switch(s)
+		{
+			case "+1" : // c
+			{
+				number = 1;
+				break;
+			}
+			case "-1" : // d
+			{
+				number = 3;
+				break;
+			}
+			case "+2" : // e
+			{
+				number = 5;
+				break;
+			}
+			case "-2\"" : // f  
+			{
+				number = 6;
+				break;
+			}
+			case "-2" : // g
+			{
+				number = 8;
+				break;
+			}
+			case "+3" : // g
+			{
+				number = 8;
+				break;
+			}
+			case "-3\'" : // a
+			{
+				number = 10;
+				break;
+			}
+			case "-3" : // b
+			{
+				number = 12;
+				break;
+			}
+			case "+4" : // c
+			{
+				number = 13;
+				break;
+			}
+			case "-4" : // d
+			{
+				number = 15;
+				break;
+			}
+			case "+5" : // e
+			{
+				number = 17;
+				break;
+			}
+			case "-5" : // f
+			{
+				number = 18;
+				break;
+			}
+			case "+6" : // g
+			{
+				number = 20;
+				break;
+			}
+			case "-6" : // a
+			{
+				number = 22;
+				break;
+			}
+			case "-7" : // b
+			{
+				number = 24;
+				break;
+			}
+			case "+7" : // c
+			{
+				number = 25;
+				break;
+			}
+			case "-8" : // d
+			{
+				number = 27;
+				break;
+			}
+			case "+8" : // e
+			{
+				number =  29;
+				break;
+			}
+			case "-9" : // f
+			{
+				number = 30;
+				break;
+			}
+			case "+9" : // g
+			{
+				number = 32;
+				break;
+			}
+			case "-10" : // a
+			{
+				number = 34;
+				break;
+			}
+			case "-10'" : // b
+			{
+				number = 36;
+				break;
+			}
+			case "+10" : // c
+			{
+				number = 37;
+				break;
+			}
+		}
+		return number;
+	}
+	
 	int switchRagaTracks(String s)
 	{
 		int number=0;
@@ -263,6 +387,61 @@ public class SwarToNumbers {
 		}
 		return n;
 	}
+	
+	int switchDiatonic(String s)
+	{
+		int n=0;
+		switch(s)
+		{
+		case "1":
+			// 
+			break;
+		case "-1":
+			break;
+		case "2":
+			break;
+		case "-2":
+			break;
+		case "3":
+			break;
+		case "-3":
+			break;
+		case "4":
+			break;
+		case "-4":
+			break;
+		case "5":
+			break;
+		case "-5":
+			break;
+		case "6":
+			break;
+		case "-6":
+			break;
+		case "7":
+			break;
+		case "-7":
+			break;
+		case "8":
+			break;
+		case "-8":
+			break;
+		case "9":
+			break;
+		case "-9":
+			break;
+		case "10":
+			break;
+		case "-10":
+			break;
+		default :
+			System.out.println("default reached : "+ s);
+			n = 1000;
+			break;
+		}
+		return n;
+	}
+	
 	void convertTracks(BufferedReader ip,BufferedWriter op) throws IOException
 	{
 		String[] split;

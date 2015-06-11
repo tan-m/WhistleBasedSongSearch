@@ -52,10 +52,10 @@ energySmooth = conv(energyFile, g, 'same');
 
 
 
- plot(energySmooth,'Color','blue'); hold on;
-
- %  plot(peakLoc,energySmooth(peakLoc),'k^','markerfacecolor',[1 1 0]);
- %  plot(troughLoc,energySmooth(troughLoc),'k^','markerfacecolor',[1 0 0]);
+% plot(energySmooth,'Color','blue'); hold on;
+%
+%   plot(peakLoc,energySmooth(peakLoc),'k^','markerfacecolor',[1 1 0]);
+%   plot(troughLoc,energySmooth(troughLoc),'k^','markerfacecolor',[1 0 0]);
 %  hold off;
 
 width = zeros(size(peak));
@@ -85,13 +85,11 @@ end
 %disp('smooth f_slice');
 
 
-multFactor = 2;
- plot(multFactor*energySmooth,'Color','red'); hold on;
- plot(trough_before,multFactor*energySmooth(trough_before),'k^','markerfacecolor',[1 1 0]);
- plot(trough_after,multFactor*energySmooth(trough_after),'k^','markerfacecolor',[1 0 0]);
- legend('Pitch','Power','Note EndPoint','Note EndPoint');
-hold off;
- % 
+multFactor = 5;
+% plot(multFactor*energySmooth,'Color','blue'); hold on;
+% plot(trough_before,multFactor*energySmooth(trough_before),'k^','markerfacecolor',[1 1 0]);
+% plot(trough_after,multFactor*energySmooth(trough_after),'k^','markerfacecolor',[1 0 0]);
+% 
 % %plot(pitchFile,'Color','green');
 % 
 %  plot(1:length(energyFile), minPeakHeight, 'yellow');
@@ -135,6 +133,11 @@ mode2 = zeros(size(peak));
 finalPitch = zeros(size(peak));
 mode3array = zeros(size(peak));
 
+fid1 = fopen('C:\Users\tanmay\Desktop\pitches_clusterDP.txt','wt');  % Note the 'wt' for writing in text mode
+fid2 = fopen('C:\Users\tanmay\Desktop\energy_clusterDP.txt','wt');  % Note the 'wt' for writing in text mode
+
+%fslice_count = 0;
+%fprintf(fid2,'%f\n',fslice_count);  % The format string is applied to each element of a
 for i = 1 : length(trough_after)
     w = floor(width(i)/5);
     before(i) = peakLoc(i) - w;
@@ -184,6 +187,15 @@ for i = 1 : length(trough_after)
     
     fullSlice= pitchFile(trough_before(i):trough_after(i));
     filteredSlice = fullSlice(fullSlice>low & fullSlice<high);
+    
+    
+    %fprintf(fid1,'%f\n',filteredSlice);  % The format string is applied to each element of a
+    fprintf(fid1,'%f\n',filteredSlice);  % The format string is applied to each element of a
+    
+    %fslice_count = fslice_count + length(filteredSlice);
+    fprintf(fid2,'%f\n',mode(filteredSlice));  % The format string is applied to each element of a
+    
+    
     if length(filteredSlice) > 1
         p = polyfit(double(1:length(filteredSlice)),double(filteredSlice),1);
 
@@ -239,6 +251,7 @@ end
 fid = fopen('C:\Users\tanmay\Desktop\pitch.txt','wt');  % Note the 'wt' for writing in text mode
 fprintf(fid,'%f\n',finalPitch);  % The format string is applied to each element of a
 fclose(fid);
-
+fclose(fid1);
+fclose(fid2);
 % disp('Matlab exec Time ')
 %tElapsed = toc(tStart)
